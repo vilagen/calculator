@@ -17,7 +17,8 @@
 
     <div id="calc">
 
-      <div id="screen"></div>
+      <label for="userInput"></label>
+      <input type="number" id="screen" value="">
 
       <div style="margin-top: 25px;"></div>
 
@@ -25,45 +26,45 @@
 
           <div class="box1">
 
-            <button class="clearButton" id="allClear" value="AC" type="string">AC</button>
+            <button class="clearButton" id="allClear" value="AC" type="string" onclick="clearAll()">AC</button>
 
             <button class="clearButton" id="clearEntry" value="CE" type="string">CE</button>
 
-            <button class="numButton" value="/" type="operator">÷</button>
+            <button class="numButton" id="opValue/" value="/" loop="0" onclick="opInputDiv()">÷</button>
 
-            <button class="numButton" value="7" type="number">7</button>
+            <button class="numButton" id="numValue7" value="7" loop="0" onclick="numberInput7()">7</button>
 
-            <button class="numButton" value="8" type="number">8</button>
+            <button class="numButton" id="numValue8" value="8" loop="1" onclick="numberInput8()">8</button>
 
-            <button class="numButton" value="9" type="number">9</button>
+            <button class="numButton" id="numValue9" value="9" loop="2" onclick="numberInput9()">9</button>
             
-            <button class="numButton" value="4" type="number">4</button>
+            <button class="numButton" id="numValue4" value="4" loop="3" onclick="numberInput4()">4</button>
 
-            <button class="numButton" value="5" type="number">5</button>
+            <button class="numButton" id="numValue5" value="5" loop="4" onclick="numberInput5()">5</button>
 
-            <button class="numButton" value="6" type="number">6</button>
+            <button class="numButton" id="numValue6" value="6" loop="5" onclick="numberInput6()">6</button>
               
-            <button class="numButton" value="1" type="number">1</button>
+            <button class="numButton" id="numValue1" value="1" loop="6" onclick="numberInput1()">1</button>
 
-            <button class="numButton" value="2" type="number">2</button>
+            <button class="numButton" id="numValue2" value="2" loop="7" onclick="numberInput2()">2</button>
 
-            <button class="numButton" value="3" type="number">3</button>
+            <button class="numButton" id="numValue3" value="3" loop="8" onclick="numberInput3()">3</button>
 
-            <button class="zeroButton" value="0" type="number">0</button>
+            <button class="zeroButton" id="numValue0" value=0 loop="9" onclick="numberInput0()">0</button>
 
-            <button class="numButton" value="." type="float">.</button>
+            <button class="numButton" id="numValueDot" value="." loop="10">.</button>
 
           </div>
 
           <div class="box2">
 
-            <button class="numButton" value="*" type="number">x</button>
+            <button class="numButton" id="opValue*" value="*" loop="1" onclick="opInputMult()">x</button>
 
-            <button class="numButton" value="-" type="number">-</button>
+            <button class="numButton" id="opValue-" value="-" loop="2" onclick="opInputSub()">-</button>
 
-            <button class="numButton" value="+" type="number">+</button>
+            <button class="numButton" id="opValue+" value="+" onclick="opInputAdd()" loop="3">+</button>
 
-            <button class="equalButton" value="=" type="number">=</button>
+            <button class="equalButton" id="eqauls" value="=" type="number">=</button>
 
           </div>
   
@@ -72,6 +73,6 @@
       </div>
 
     </div>
-  
+    <script src="index.js"></script>
 </body>
 </html>

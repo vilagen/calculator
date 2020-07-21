@@ -1,14 +1,19 @@
+input { 
+  text-align: right; 
+}
+
 #calc {
   height: 600px;
   width: 375px;
   background-color: green;
-  padding-top: 50px;
+  padding-top: 30px;
   padding-left: 50px;
   padding-right: 50px;
 }
 
 #screen {
   /* position: inherit; */
+  font-size: 45px;
   height: 100px;
   width: 275px;
   background-color: gray;
