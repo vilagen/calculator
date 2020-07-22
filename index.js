@@ -85,9 +85,9 @@ opFunction = () => {
     
     case "/":
 
-      // if(opFirstButton === true) {
-      //   answer = getScreen() - Math.abs(lastUserInput);
-      // } 
+      if(opFirstButton === true) {
+        answer = answer / lastUserInput;
+      } 
       answer = screenValue / getScreen();
       calcFunction(answer);
       break;
@@ -142,8 +142,8 @@ opInputAdd = () => {
 
 opInputDiv = () => {
 
-  if(opSet===true && operator != "/") {
-    lastUserInput;
+  if(opSet===true && (operator === "+" || operator === "-") ) {
+    lastUserInput === 1;
   }
 
   if(opSet === true) {
@@ -162,6 +162,10 @@ opInputDiv = () => {
 };
 
 opInputMult = () => {
+
+  if(opSet===true && operator != "/") {
+    lastUserInput;
+  }
 
   if(opSet === true) {
     opFunction();
