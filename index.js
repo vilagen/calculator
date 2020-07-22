@@ -85,11 +85,20 @@ opFunction = () => {
     
     case "/":
 
-      // if(opFirstButton === true) {
-      //   answer = getScreen() - Math.abs(lastUserInput);
-      // } 
-      answer = screenValue / getScreen();
+    console.log("Check opfirstButton: " + opFirstButton)
+
+      if(opFirstButton === true) {
+        // lastUserInput = 1;
+        answer = getScreen() / lastUserInput;
+      } else {
+        answer = screenValue / getScreen();
+        lastUserInput = getScreen();
+      }
+
+      console.log("This is screenvalue division after answer: " + screenValue);
+      console.log("Thi is lastuserinput2: " + lastUserInput);
       calcFunction(answer);
+      
       break;
 
     case "*":
@@ -106,8 +115,8 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      console.log("This is screenvalue minus: " + screenValue)
-      console.log("Thi is lastuserinput2: " + lastUserInput);
+      // console.log("This is screenvalue minus: " + screenValue);
+      // console.log("Thi is lastuserinput2: " + lastUserInput);
       calcFunction(answer);
 
       break;
@@ -121,9 +130,12 @@ opFunction = () => {
 
 opInputAdd = () => {
 
+  if(opSet===true && operator != "+" && (operator == "/" || operator == "*") ){
+    lastUserInput = 1;
+  }
   if(opSet===true && operator != "+") {
     lastUserInput = 0;
-  }
+  };
 
   if(opSet === true) {
     opFunction();
@@ -134,7 +146,7 @@ opInputAdd = () => {
     lastUserInput = screenValue;
     opSet = true;
     opFirstButton = true;
-  }
+  };
 
   operator = "+";
 
@@ -142,9 +154,12 @@ opInputAdd = () => {
 
 opInputDiv = () => {
 
-  if(opSet===true && operator != "/") {
-    lastUserInput;
+  if(opSet===true && ( operator === "+" || operator === "-" ) ) {
+    lastUserInput = 1;
   }
+
+  console.log("This is screenvalue division: " + screenValue);
+  console.log("Thi is lastuserinput division: " + lastUserInput);
 
   if(opSet === true) {
     opFunction();
@@ -155,7 +170,7 @@ opInputDiv = () => {
     lastUserInput = screenValue;
     opSet = true;
     opFirstButton = true;
-  }
+  };
 
   operator = "/";
 
