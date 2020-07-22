@@ -178,6 +178,10 @@ opInputDiv = () => {
 
 opInputMult = () => {
 
+  if(opSet===true && operator != "/") {
+    lastUserInput;
+  }
+
   if(opSet === true) {
     opFunction();
   };
