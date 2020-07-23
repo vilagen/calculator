@@ -130,10 +130,10 @@ opFunction = () => {
 
 opInputAdd = () => {
 
-  if(opSet===true && operator != "+" && (operator == "/" || operator == "*") ){
+  if(opSet===true && (operator == "/" || operator == "*") ){
     lastUserInput = 1;
   }
-  if(opSet===true && operator != "+") {
+  else if(opSet===true && operator == "-") {
     lastUserInput = 0;
   };
 
