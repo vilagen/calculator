@@ -1,7 +1,3 @@
-clearAll = () => {
-  document.getElementById("screen").value="";
-};
-
 const elemFun = (x) => document.getElementById(x).getAttribute("value");
 const calcScreen = (x) => document.getElementById("screen").value+=x;
 const clearScreen = () => document.getElementById("screen").value="";
@@ -16,6 +12,17 @@ let lastUserInput;
 let operator;
 let opSet = false;
 let opFirstButton = false;
+
+// clear all user input and put calc in blank state
+clearAll = () => {
+  document.getElementById("screen").value="";
+  answer = 0;
+  screenValue = 0;
+  lastUserInput = 0;
+  operator = "";
+  opSet = false;
+  opFirstButton = false;
+};
 
 // calc buttons
 const calcButton0 = elemFun("numValue0");
@@ -32,7 +39,7 @@ const calcButton9 = elemFun("numValue9");
 // operator buttons
 const calcDivision = elemFun("opValue/");
 const calcAddition = elemFun("opValue+");
-console.log(typeof calcButton0);
+
 
 // clear if you already perfromed an operation
 const opClear = () => {
@@ -55,6 +62,7 @@ numberInput7 = () => { opClear(); calcScreen(calcButton7); };
 numberInput8 = () => { opClear(); calcScreen(calcButton8); };
 numberInput9 = () => { opClear(); calcScreen(calcButton9); };
 
+
 // operator functions
 
 opFunction = () => {
@@ -63,8 +71,6 @@ opFunction = () => {
     calcScreen(answer);
   }
 
-  console.log("This is last user input: " + lastUserInput);
-
   if(opFirstButton === true) {
     screenValue = lastUserInput;
   } else if(opFirstButton === false && answer) {
@@ -72,39 +78,46 @@ opFunction = () => {
     lastUserInput = getScreen();
   }
 
-  // console.log("This is screenvalue: " + screenValue);
-
-  // console.log("this is getscreen: " + getScreen())
-
   switch(operator) {
 
     case "+":
-      answer = getScreen() + screenValue; 
+
+      if(opFirstButton === true) {
+        answer = getScreen() + lastUserInput;
+      } else {
+        answer = screenValue + getScreen();
+        lastUserInput = getScreen();
+      }
+
       calcFunction(answer);
+
       break;
     
     case "/":
 
-    console.log("Check opfirstButton: " + opFirstButton)
-
       if(opFirstButton === true) {
-        // lastUserInput = 1;
         answer = getScreen() / lastUserInput;
       } else {
         answer = screenValue / getScreen();
         lastUserInput = getScreen();
       }
 
-      console.log("This is screenvalue division after answer: " + screenValue);
-      console.log("Thi is lastuserinput2: " + lastUserInput);
       calcFunction(answer);
       
       break;
 
     case "*":
-      answer = getScreen() * screenValue;
+
+      if(opFirstButton === true) {
+        answer = getScreen() * lastUserInput;
+      } else {
+        answer = screenValue * getScreen();
+        lastUserInput = getScreen();
+      }
+
       calcFunction(answer);
-    break;
+      
+      break;
 
     case "-":
 
@@ -115,104 +128,45 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      // console.log("This is screenvalue minus: " + screenValue);
-      // console.log("Thi is lastuserinput2: " + lastUserInput);
       calcFunction(answer);
 
       break;
 
     }
 
-  console.log("This is answer: " + answer)
   opFirstButton = true;
 
 };
 
-opInputAdd = () => {
-
-  if(opSet===true && (operator == "/" || operator == "*") ){
-    lastUserInput = 1;
-  }
-  else if(opSet===true && operator == "-") {
-    lastUserInput = 0;
-  };
-
-  if(opSet === true) {
+// function for different operator inputs
+const inputFunction = (Opa, Opb, Opc, Opd, LUIx, LUIy) => {
+  if(opSet===true && (operator == Opa || operator == Opb) ){
+    lastUserInput = LUIx;
     opFunction();
-  };
-
-  if(opSet === false) {
-    screenValue = getScreen();
-    lastUserInput = screenValue;
-    opSet = true;
-    opFirstButton = true;
-  };
-
-  operator = "+";
-
-};
-
-opInputDiv = () => {
-
-  if(opSet===true && ( operator === "+" || operator === "-" ) ) {
-    lastUserInput = 1;
   }
-
-  console.log("This is screenvalue division: " + screenValue);
-  console.log("Thi is lastuserinput division: " + lastUserInput);
-
-  if(opSet === true) {
+  else if(opSet===true && operator == Opc) {
+    lastUserInput = LUIy;
     opFunction();
-  };
-
-  if(opSet === false) {
-    screenValue = getScreen();
-    lastUserInput = screenValue;
-    opSet = true;
-    opFirstButton = true;
-  };
-
-  operator = "/";
-
-};
-
-opInputMult = () => {
-
-  if(opSet===true && operator != "/") {
-    lastUserInput;
+  } 
+  else if(opSet === true) {
+    opFunction();
   }
-
-  if(opSet === true) {
-    opFunction();
-  };
-
-  if(opSet === false) {
+  else if(opSet === false) {
     screenValue = getScreen();
     lastUserInput = screenValue;
     opSet = true;
     opFirstButton = true;
   }
 
-  operator = "*";
+  operator = Opd;
+}
 
-};
+// operator button functions
 
-opInputSub = () => {
+opInputAdd = () => inputFunction("/", "*", "-", "+", 1, 0);
 
-  if(opSet===true && operator != "-") {
-    lastUserInput = 0;
-  }
+opInputSub = () => inputFunction("/", "*", "+", "-", 1, 0);
 
-  if (opSet === true) {
-    opFunction();
-  } else if(opSet === false) {
-    screenValue = getScreen();
-    lastUserInput = screenValue;
-    opSet = true;
-    opFirstButton = true;
-    console.log("For minus, this is screen value: " + screenValue);
-  }
+opInputMult = () => inputFunction("+", "-", "/", "*", 0, 1);
 
-  operator = "-";
-
-};
+opInputDiv = () => inputFunction("+", "-", "*", "/", 0, 1);
