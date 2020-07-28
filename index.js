@@ -6,17 +6,18 @@ const calcFunction = (x) => document.getElementById("screen").value=x;
 
 console.log(getScreen())
 
-let answer;
+let answer = null;
 let screenValue;
 let lastUserInput;
 let operator;
+let floating = false;
 let opSet = false;
 let opFirstButton = false;
 
 // clear all user input and put calc in blank state
 clearAll = () => {
   document.getElementById("screen").value="";
-  answer = 0;
+  answer = null;
   screenValue = 0;
   lastUserInput = 0;
   operator = "";
@@ -24,7 +25,7 @@ clearAll = () => {
   opFirstButton = false;
 };
 
-// calc buttons
+// calc buttons functions
 const calcButton0 = elemFun("numValue0");
 const calcButton1 = elemFun("numValue1");
 const calcButton2 = elemFun("numValue2");
@@ -35,17 +36,22 @@ const calcButton6 = elemFun("numValue6");
 const calcButton7 = elemFun("numValue7");
 const calcButton8 = elemFun("numValue8");
 const calcButton9 = elemFun("numValue9");
-
-// operator buttons
-const calcDivision = elemFun("opValue/");
-const calcAddition = elemFun("opValue+");
+const dotButton = elemFun("numValueDot");
 
 
-// clear if you already perfromed an operation
-const opClear = () => {
+
+// clear if you pressed an operator button but no numbers yet.
+opClear = () => {
   if(opFirstButton === true) {
     clearScreen();
     opFirstButton = false
+  }
+}
+
+const checkFloat = (calcButton) => {
+  if(floating) {
+    calcScreen(`.${calcButton}`)
+    floating = false;
   }
 }
 
@@ -61,6 +67,7 @@ numberInput6 = () => { opClear(); calcScreen(calcButton6); };
 numberInput7 = () => { opClear(); calcScreen(calcButton7); };
 numberInput8 = () => { opClear(); calcScreen(calcButton8); };
 numberInput9 = () => { opClear(); calcScreen(calcButton9); };
+dotInput = () => { opClear(); parseFloat(getScreen()); };
 
 
 // operator functions
@@ -74,7 +81,7 @@ opFunction = () => {
   if(opFirstButton === true) {
     screenValue = lastUserInput;
   } else if(opFirstButton === false && answer) {
-    screenValue = parseInt(answer);
+    screenValue = parseFloat(answer);
     lastUserInput = getScreen();
   }
 
@@ -138,35 +145,79 @@ opFunction = () => {
 
 };
 
-// function for different operator inputs
-const inputFunction = (Opa, Opb, Opc, Opd, LUIx, LUIy) => {
-  if(opSet===true && (operator == Opa || operator == Opb) ){
-    lastUserInput = LUIx;
-    opFunction();
+const inputFunction = (Op) => {
+  
+  if(opSet===true && opFirstButton===true ){
+    operator = Op
   }
-  else if(opSet===true && operator == Opc) {
-    lastUserInput = LUIy;
+  else if(opSet===true && opFirstButton===false) {
     opFunction();
   } 
-  else if(opSet === true) {
-    opFunction();
-  }
   else if(opSet === false) {
     screenValue = getScreen();
     lastUserInput = screenValue;
     opSet = true;
     opFirstButton = true;
+    console.log(`This is opSet: ${opSet}.`)
+    console.log(`This is opFirstButton: ${opFirstButton}.`)
   }
 
-  operator = Opd;
+  operator = Op;
 }
+
+opInputAdd = () => inputFunction("+");
+
+opInputSub = () => inputFunction("-");
+
+opInputMult = () => inputFunction("*");
+
+opInputDiv = () => inputFunction("/");
+
+opEqual = () => {
+  if(opSet === false) {
+  }
+  else if(opSet===true && opFirstButton===true && answer===null) {
+  } 
+  else if(opSet === true) {
+    opFunction();
+  }
+}
+
+// I wrote this function remembering calculators incorrectly thinking that everytime you 
+// hit an operator without putting in another value, it would just keep adding/sub/div/mult
+// the last value put in, but I believe that is only true for the "equal" button.
+// It did work though.
+
+// function for different operator inputs
+// const inputFunction = (Opa, Opb, Opc, Opd, LUIx, LUIy) => {
+  
+//   if(opSet===true && (operator == Opa || operator == Opb) ){
+//     lastUserInput = LUIx;
+//     opFunction();
+//   }
+//   else if(opSet===true && operator == Opc) {
+//     lastUserInput = LUIy;
+//     opFunction();
+//   } 
+//   else if(opSet === true) {
+//     opFunction();
+//   }
+//   else if(opSet === false) {
+//     screenValue = getScreen();
+//     lastUserInput = screenValue;
+//     opSet = true;
+//     opFirstButton = true;
+//   }
+
+//   operator = Opd;
+// }
 
 // operator button functions
 
-opInputAdd = () => inputFunction("/", "*", "-", "+", 1, 0);
+// opInputAdd = () => inputFunction("/", "*", "-", "+", 1, 0);
 
-opInputSub = () => inputFunction("/", "*", "+", "-", 1, 0);
+// opInputSub = () => inputFunction("/", "*", "+", "-", 1, 0);
 
-opInputMult = () => inputFunction("+", "-", "/", "*", 0, 1);
+// opInputMult = () => inputFunction("+", "-", "/", "*", 0, 1);
 
-opInputDiv = () => inputFunction("+", "-", "*", "/", 0, 1);
+// opInputDiv = () => inputFunction("+", "-", "*", "/", 0, 1);
