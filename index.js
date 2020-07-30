@@ -26,6 +26,7 @@ clearAll = () => {
 };
 
 // calc buttons functions
+// which I realized became kind of pointless, but nice exercise none the less.
 const calcButton0 = elemFun("numValue0");
 const calcButton1 = elemFun("numValue1");
 const calcButton2 = elemFun("numValue2");
@@ -48,12 +49,12 @@ opClear = () => {
   }
 }
 
-const checkFloat = (calcButton) => {
-  if(floating) {
-    calcScreen(`.${calcButton}`)
-    floating = false;
-  }
-}
+// const checkFloat = (calcButton) => {
+//   if(floating) {
+//     calcScreen(`.${calcButton}`)
+//     floating = false;
+//   }
+// }
 
 // number functions
 
@@ -67,7 +68,7 @@ numberInput6 = () => { opClear(); calcScreen(calcButton6); };
 numberInput7 = () => { opClear(); calcScreen(calcButton7); };
 numberInput8 = () => { opClear(); calcScreen(calcButton8); };
 numberInput9 = () => { opClear(); calcScreen(calcButton9); };
-dotInput = () => { opClear(); parseFloat(getScreen()); };
+dotInput = () => { opClear(); calcScreen(dotButton); };
 
 
 // operator functions
