@@ -152,9 +152,6 @@ const fixedAmntValue = (number) => {
 
 opFunction = () => {
 
-  console.log(screenValue);
-  console.log(lastUserInput)
-
   if(getScreen() === NaN) {
     calcScreen(answer);
   }
