@@ -1,3 +1,5 @@
+document.getElementById("screen").disabled = true;
+
 const elemFun = (x) => document.getElementById(x).getAttribute("value");
 const calcScreen = (x) => document.getElementById("screen").value+=x;
 const clearScreen = () => document.getElementById("screen").value="";
@@ -22,7 +24,7 @@ let opFirstButton = false;
 
 // clear all user input and put calc in blank state
 clearAll = () => {
-  document.getElementById("screen").value="";
+  clearScreen();
   answer = null;
   screenValue = 0;
   lastUserInput = 0;
@@ -38,7 +40,6 @@ clearAll = () => {
 
 clearEntry = () => {
   entry = document.getElementById("screen").value
-  console.log(entry.slice(-2, -1));
 
   if(entry.slice(-2, -1) === "." ) {
     newValue = true;
@@ -98,6 +99,8 @@ const checkFloat = (calcButton) => {
 // number functions
 // aware I could just put a string number on checkFloat, but wanted to also practice
 // pulling values from HTML. But does make the elemFun pointless though.
+
+numberInput = (event) => {opClear(); checkFloat(event);};
 numberInput0 = () => { opClear(); checkFloat(calcButton0); }; 
 numberInput1 = () => { opClear(); checkFloat(calcButton1); };
 numberInput2 = () => { opClear(); checkFloat(calcButton2); };
@@ -261,6 +264,50 @@ opEqual = () => {
     opFunction();
   }
 }
+
+window.addEventListener("keydown", function(event) {
+  let input = event.key;
+
+  switch(input) {
+
+    case "Delete":
+      clearAll();
+      break;
+
+    case "Backspace":
+      clearEntry();
+      break;
+
+    case "+":
+      opInputAdd();
+      break;
+
+    case "-":
+      inputFunction("-");
+      break;
+
+    case "*":
+      inputFunction("*");
+      break;
+
+    case "/":
+      inputFunction("/");
+      break;
+
+    case "Enter":
+      opEqual();
+      break;
+
+    case ".":
+      dotInput();
+      break;
+
+    default:
+      numberInput(input);
+
+  }
+
+}, true);
 
 // I wrote this function remembering calculators incorrectly thinking that everytime you 
 // hit an operator without putting in another value, it would just keep adding/sub/div/mult
