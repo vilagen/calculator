@@ -2,19 +2,21 @@ const elemFun = (x) => document.getElementById(x).getAttribute("value");
 const calcScreen = (x) => document.getElementById("screen").value+=x;
 const clearScreen = () => document.getElementById("screen").value="";
 const getScreen = () => Number(document.getElementById("screen").value);
-const calcFunction = (x) => document.getElementById("screen").value=x; 
-
-console.log(getScreen())
+const calcFunction = (x) =>{ document.getElementById("screen").value=x }; 
 
 let answer = null;
 let screenValue;
 let lastUserInput;
 let operator;
+
 let fixedValue = 0;
 let fixedAmnt = 0;
+
+// used to make sure we can only have 1 decimal in a value.
 let floating = false;
 let floatNext = false;
 let newValue = false;
+
 let opSet = false;
 let opFirstButton = false;
 
@@ -25,8 +27,27 @@ clearAll = () => {
   screenValue = 0;
   lastUserInput = 0;
   operator = "";
+  fixedValue = 0;
+  fixedAmnt = 0;
+  floating = false;
+  floatNext = false;
+  newValue = false;
   opSet = false;
   opFirstButton = false;
+};
+
+clearEntry = () => {
+  entry = document.getElementById("screen").value
+  console.log(entry.slice(-2, -1));
+
+  if(entry.slice(-2, -1) === "." ) {
+    newValue = true;
+    calcFunction(entry.substring(0, entry.length-2));
+  } 
+  else {
+    calcFunction(entry.substring(0, entry.length-1));
+  }
+
 };
 
 // calc buttons functions
@@ -74,28 +95,9 @@ const checkFloat = (calcButton) => {
   fixedAmnt = fixedValue > fixedAmnt ? fixedValue : fixedAmnt;
 };
 
-// take off any zeros at end of value on screen.
-const fixedAmntValue = (value) => {
-  if(floating) {
-    valueArray = value.toString().split("")
-    let i = 0;
-    let l = valueArray.length;
-    for( i = l-1; i > 0; i--) {
-      if(l[i] === "0") {
-        fixedAmnt--
-      }
-      else if(l[i] != "0" ) {
-        return Number(value.toFixed(fixedAmnt));
-      }
-    }
-  }
-  else {
-    return value;
-  }
-}
-
 // number functions
-
+// aware I could just put a string number on checkFloat, but wanted to also practice
+// pulling values from HTML. But does make the elemFun pointless though.
 numberInput0 = () => { opClear(); checkFloat(calcButton0); }; 
 numberInput1 = () => { opClear(); checkFloat(calcButton1); };
 numberInput2 = () => { opClear(); checkFloat(calcButton2); };
@@ -107,15 +109,41 @@ numberInput7 = () => { opClear(); checkFloat(calcButton7); };
 numberInput8 = () => { opClear(); checkFloat(calcButton8); };
 numberInput9 = () => { opClear(); checkFloat(calcButton9); };
 
-// function to create floating numbers
+// function to create floating numbers and check if current number is already floating.
 dotInput = () => { 
   opClear(); 
-  if(floating === false) {
+  if(!floating) {
     floating = true;
     floatNext = true;
-  }  
+  } 
+  else if (floating && newValue) {
+    newValue = false;
+    floatNext = true;
+  } 
 };
 
+// take off any zeros at end of value on screen and adjust fixedAmnt.
+const fixedAmntValue = (number) => {
+  if(floating) {
+    numberArray = number.toString().split("")
+    let i = 0;
+    let l = numberArray.length;
+    for( i = l-1; i >= 0; i--) {
+      if(l[i] === "0") {
+        fixedAmnt--
+      }
+      else if(fixedAmnt < 0) {
+        return Number(number.toFixed(0));
+      }
+      else if(l[i] != "0" ) {
+        return Number(number.toFixed(fixedAmnt));
+      }
+    }
+  }
+  else {
+    return number;
+  }
+}
 
 // operator functions
 
@@ -210,12 +238,10 @@ const inputFunction = (Op) => {
     lastUserInput = Number(screenValue);
     opSet = true;
     opFirstButton = true;
-    console.log(`This is opSet: ${opSet}.`)
-    console.log(`This is opFirstButton: ${opFirstButton}.`)
   }
 
   operator = Op;
-  floating = false;
+  newValue = true;
 }
 
 opInputAdd = () => inputFunction("+");
