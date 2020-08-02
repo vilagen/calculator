@@ -10,6 +10,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <title>Document</title>
+
+  <style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    </style>
+
 </head>
 <body>
 
@@ -18,7 +33,9 @@
     <div id="calc">
 
       <label for="userInput"></label>
-      <input type="number" step="any" id="screen" value="">
+      <input type="number" id="screen" value="">
+
+      <!-- <div id="screen" value=""></div> -->
 
       <div style="margin-top: 25px;"></div>
 

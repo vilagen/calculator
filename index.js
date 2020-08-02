@@ -1,7 +1,7 @@
 const elemFun = (x) => document.getElementById(x).getAttribute("value");
 const calcScreen = (x) => document.getElementById("screen").value+=x;
 const clearScreen = () => document.getElementById("screen").value="";
-const getScreen = () => parseInt(document.getElementById("screen").value);
+const getScreen = () => Number(document.getElementById("screen").value);
 const calcFunction = (x) => document.getElementById("screen").value=x; 
 
 console.log(getScreen())
@@ -10,7 +10,11 @@ let answer = null;
 let screenValue;
 let lastUserInput;
 let operator;
+let fixedValue = 0;
+let fixedAmnt = 0;
 let floating = false;
+let floatNext = false;
+let newValue = false;
 let opSet = false;
 let opFirstButton = false;
 
@@ -43,37 +47,82 @@ const dotButton = elemFun("numValueDot");
 
 // clear if you pressed an operator button but no numbers yet.
 opClear = () => {
-  if(opFirstButton === true) {
+  if(opFirstButton) {
     clearScreen();
     opFirstButton = false
   }
 }
 
-// const checkFloat = (calcButton) => {
-//   if(floating) {
-//     calcScreen(`.${calcButton}`)
-//     floating = false;
-//   }
-// }
+// function to check if a float is set to be made.
+// also, if fixed value for current number being pressed is higher than set fixed amount
+// increase fixed amount.
+const checkFloat = (calcButton) => {
+  if(floatNext) {
+    fixedValue = 0;
+    calcScreen(`.${calcButton}`)
+    floatNext = false;
+    fixedValue++;
+  } 
+  else if(floating) {
+    calcScreen(calcButton);
+    fixedValue++;
+  }
+  else {
+    calcScreen(calcButton);
+  };
+
+  fixedAmnt = fixedValue > fixedAmnt ? fixedValue : fixedAmnt;
+};
+
+// take off any zeros at end of value on screen.
+const fixedAmntValue = (value) => {
+  if(floating) {
+    valueArray = value.toString().split("")
+    let i = 0;
+    let l = valueArray.length;
+    for( i = l-1; i > 0; i--) {
+      if(l[i] === "0") {
+        fixedAmnt--
+      }
+      else if(l[i] != "0" ) {
+        return Number(value.toFixed(fixedAmnt));
+      }
+    }
+  }
+  else {
+    return value;
+  }
+}
 
 // number functions
 
-numberInput0 = () => { opClear(); calcScreen(calcButton0); }; 
-numberInput1 = () => { opClear(); calcScreen(calcButton1); };
-numberInput2 = () => { opClear(); calcScreen(calcButton2); };
-numberInput3 = () => { opClear(); calcScreen(calcButton3); };
-numberInput4 = () => { opClear(); calcScreen(calcButton4); };
-numberInput5 = () => { opClear(); calcScreen(calcButton5); };
-numberInput6 = () => { opClear(); calcScreen(calcButton6); };
-numberInput7 = () => { opClear(); calcScreen(calcButton7); };
-numberInput8 = () => { opClear(); calcScreen(calcButton8); };
-numberInput9 = () => { opClear(); calcScreen(calcButton9); };
-dotInput = () => { opClear(); calcScreen(dotButton); };
+numberInput0 = () => { opClear(); checkFloat(calcButton0); }; 
+numberInput1 = () => { opClear(); checkFloat(calcButton1); };
+numberInput2 = () => { opClear(); checkFloat(calcButton2); };
+numberInput3 = () => { opClear(); checkFloat(calcButton3); };
+numberInput4 = () => { opClear(); checkFloat(calcButton4); };
+numberInput5 = () => { opClear(); checkFloat(calcButton5); };
+numberInput6 = () => { opClear(); checkFloat(calcButton6); };
+numberInput7 = () => { opClear(); checkFloat(calcButton7); };
+numberInput8 = () => { opClear(); checkFloat(calcButton8); };
+numberInput9 = () => { opClear(); checkFloat(calcButton9); };
+
+// function to create floating numbers
+dotInput = () => { 
+  opClear(); 
+  if(floating === false) {
+    floating = true;
+    floatNext = true;
+  }  
+};
 
 
 // operator functions
 
 opFunction = () => {
+
+  console.log(screenValue);
+  console.log(lastUserInput)
 
   if(getScreen() === NaN) {
     calcScreen(answer);
@@ -82,8 +131,8 @@ opFunction = () => {
   if(opFirstButton === true) {
     screenValue = lastUserInput;
   } else if(opFirstButton === false && answer) {
-    screenValue = parseFloat(answer);
-    lastUserInput = getScreen();
+    screenValue = Number(answer);
+    lastUserInput = fixedAmntValue(getScreen());
   }
 
   switch(operator) {
@@ -97,7 +146,7 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      calcFunction(answer);
+      calcFunction(fixedAmntValue(answer));
 
       break;
     
@@ -110,7 +159,7 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      calcFunction(answer);
+      calcFunction(fixedAmntValue(answer));
       
       break;
 
@@ -123,7 +172,7 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      calcFunction(answer);
+      calcFunction(fixedAmntValue(answer));
       
       break;
 
@@ -136,7 +185,7 @@ opFunction = () => {
         lastUserInput = getScreen();
       }
 
-      calcFunction(answer);
+      calcFunction(fixedAmntValue(answer));
 
       break;
 
@@ -147,6 +196,8 @@ opFunction = () => {
 };
 
 const inputFunction = (Op) => {
+
+  floatNext = false;
   
   if(opSet===true && opFirstButton===true ){
     operator = Op
@@ -155,8 +206,8 @@ const inputFunction = (Op) => {
     opFunction();
   } 
   else if(opSet === false) {
-    screenValue = getScreen();
-    lastUserInput = screenValue;
+    screenValue = fixedAmntValue(getScreen());
+    lastUserInput = Number(screenValue);
     opSet = true;
     opFirstButton = true;
     console.log(`This is opSet: ${opSet}.`)
@@ -164,6 +215,7 @@ const inputFunction = (Op) => {
   }
 
   operator = Op;
+  floating = false;
 }
 
 opInputAdd = () => inputFunction("+");
